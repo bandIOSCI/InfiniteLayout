@@ -17,7 +17,7 @@
                BlueprintIdentifier = "607FACCF1AFB9204008FA782"
                BuildableName = "InfiniteLayout_Example.app"
                BlueprintName = "InfiniteLayout_Example"
-               ReferencedContainer = "container:InfiniteLayout.xcodeproj">
+               ReferencedContainer = "container:InfiniteLayout_Example.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
          <BuildActionEntry
@@ -29,9 +29,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "607FACE41AFB9204008FA782"
-               BuildableName = "InfiniteLayout_Tests.xctest"
-               BlueprintName = "InfiniteLayout_Tests"
-               ReferencedContainer = "container:InfiniteLayout.xcodeproj">
+               BuildableName = "InfiniteLayout_Example_Tests.xctest"
+               BlueprintName = "InfiniteLayout_Example_Tests"
+               ReferencedContainer = "container:InfiniteLayout_Example.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -40,7 +40,6 @@
       buildConfiguration = "Debug"
       selectedDebuggerIdentifier = "Xcode.DebuggerFoundation.Debugger.LLDB"
       selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
-      language = ""
       shouldUseLaunchSchemeArgsEnv = "YES">
       <Testables>
          <TestableReference
@@ -48,9 +47,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "607FACE41AFB9204008FA782"
-               BuildableName = "InfiniteLayout_Tests.xctest"
-               BlueprintName = "InfiniteLayout_Tests"
-               ReferencedContainer = "container:InfiniteLayout.xcodeproj">
+               BuildableName = "InfiniteLayout_Example_Tests.xctest"
+               BlueprintName = "InfiniteLayout_Example_Tests"
+               ReferencedContainer = "container:InfiniteLayout_Example.xcodeproj">
             </BuildableReference>
          </TestableReference>
       </Testables>
@@ -60,7 +59,7 @@
             BlueprintIdentifier = "607FACCF1AFB9204008FA782"
             BuildableName = "InfiniteLayout_Example.app"
             BlueprintName = "InfiniteLayout_Example"
-            ReferencedContainer = "container:InfiniteLayout.xcodeproj">
+            ReferencedContainer = "container:InfiniteLayout_Example.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
       <AdditionalOptions>
@@ -70,7 +69,6 @@
       buildConfiguration = "Debug"
       selectedDebuggerIdentifier = "Xcode.DebuggerFoundation.Debugger.LLDB"
       selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
-      language = ""
       launchStyle = "0"
       useCustomWorkingDirectory = "NO"
       ignoresPersistentStateOnLaunch = "NO"
@@ -84,7 +82,7 @@
             BlueprintIdentifier = "607FACCF1AFB9204008FA782"
             BuildableName = "InfiniteLayout_Example.app"
             BlueprintName = "InfiniteLayout_Example"
-            ReferencedContainer = "container:InfiniteLayout.xcodeproj">
+            ReferencedContainer = "container:InfiniteLayout_Example.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
       <AdditionalOptions>
@@ -103,7 +101,7 @@
             BlueprintIdentifier = "607FACCF1AFB9204008FA782"
             BuildableName = "InfiniteLayout_Example.app"
             BlueprintName = "InfiniteLayout_Example"
-            ReferencedContainer = "container:InfiniteLayout.xcodeproj">
+            ReferencedContainer = "container:InfiniteLayout_Example.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </ProfileAction>

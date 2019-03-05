@@ -43,7 +43,7 @@
 		607FACDA1AFB9204008FA782 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		607FACDC1AFB9204008FA782 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		607FACDF1AFB9204008FA782 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/LaunchScreen.xib; sourceTree = "<group>"; };
-		607FACE51AFB9204008FA782 /* InfiniteLayout_Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = InfiniteLayout_Tests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		607FACE51AFB9204008FA782 /* InfiniteLayout_Example_Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = InfiniteLayout_Example_Tests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		607FACEA1AFB9204008FA782 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		607FACEB1AFB9204008FA782 /* Tests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Tests.swift; sourceTree = "<group>"; };
 		A6830D8B970E919B725A0D5E /* Pods_InfiniteLayout_Example.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_InfiniteLayout_Example.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -95,7 +95,7 @@
 			isa = PBXGroup;
 			children = (
 				607FACD01AFB9204008FA782 /* InfiniteLayout_Example.app */,
-				607FACE51AFB9204008FA782 /* InfiniteLayout_Tests.xctest */,
+				607FACE51AFB9204008FA782 /* InfiniteLayout_Example_Tests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -236,9 +236,9 @@
 			productReference = 607FACD01AFB9204008FA782 /* InfiniteLayout_Example.app */;
 			productType = "com.apple.product-type.application";
 		};
-		607FACE41AFB9204008FA782 /* InfiniteLayout_Tests */ = {
+		607FACE41AFB9204008FA782 /* InfiniteLayout_Example_Tests */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 607FACF21AFB9204008FA782 /* Build configuration list for PBXNativeTarget "InfiniteLayout_Tests" */;
+			buildConfigurationList = 607FACF21AFB9204008FA782 /* Build configuration list for PBXNativeTarget "InfiniteLayout_Example_Tests" */;
 			buildPhases = (
 				BB5E5FB53E7C451064DBC9A2 /* [CP] Check Pods Manifest.lock */,
 				607FACE11AFB9204008FA782 /* Sources */,
@@ -250,9 +250,9 @@
 			dependencies = (
 				607FACE71AFB9204008FA782 /* PBXTargetDependency */,
 			);
-			name = InfiniteLayout_Tests;
+			name = InfiniteLayout_Example_Tests;
 			productName = Tests;
-			productReference = 607FACE51AFB9204008FA782 /* InfiniteLayout_Tests.xctest */;
+			productReference = 607FACE51AFB9204008FA782 /* InfiniteLayout_Example_Tests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
 /* End PBXNativeTarget section */
@@ -278,7 +278,7 @@
 					};
 				};
 			};
-			buildConfigurationList = 607FACCB1AFB9204008FA782 /* Build configuration list for PBXProject "InfiniteLayout" */;
+			buildConfigurationList = 607FACCB1AFB9204008FA782 /* Build configuration list for PBXProject "InfiniteLayout_Example" */;
 			compatibilityVersion = "Xcode 3.2";
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
@@ -292,7 +292,7 @@
 			projectRoot = "";
 			targets = (
 				607FACCF1AFB9204008FA782 /* InfiniteLayout_Example */,
-				607FACE41AFB9204008FA782 /* InfiniteLayout_Tests */,
+				607FACE41AFB9204008FA782 /* InfiniteLayout_Example_Tests */,
 			);
 		};
 /* End PBXProject section */
@@ -613,7 +613,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		607FACCB1AFB9204008FA782 /* Build configuration list for PBXProject "InfiniteLayout" */ = {
+		607FACCB1AFB9204008FA782 /* Build configuration list for PBXProject "InfiniteLayout_Example" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				607FACED1AFB9204008FA782 /* Debug */,
@@ -631,7 +631,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		607FACF21AFB9204008FA782 /* Build configuration list for PBXNativeTarget "InfiniteLayout_Tests" */ = {
+		607FACF21AFB9204008FA782 /* Build configuration list for PBXNativeTarget "InfiniteLayout_Example_Tests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				607FACF31AFB9204008FA782 /* Debug */,
