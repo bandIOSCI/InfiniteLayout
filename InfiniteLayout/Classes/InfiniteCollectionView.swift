@@ -7,9 +7,38 @@
 
 import UIKit
 
+@objc
+public enum InfiniteLayoutCenterAlignmentType: Int, CustomStringConvertible {
+    case centerTop = 0
+    case centerLeft
+    case center
+    case centerBottom
+    case centerRight
+    
+    public var description: String {
+        switch self {
+        case .centerTop:
+            return "centerTop"
+        case .centerLeft:
+            return "centerLeft"
+        case .center:
+            return "center"
+        case .centerBottom:
+            return "centerBottom"
+        case .centerRight:
+            return "centerRight"
+        }
+    }
+}
+
 @objc public protocol InfiniteCollectionViewDelegate {
     
-    @objc optional func infiniteCollectionView(_ infiniteCollectionView: InfiniteCollectionView, didChangeCenteredIndexPath centeredIndexPath: IndexPath?)
+    @objc
+    optional func infiniteCollectionView(_ infiniteCollectionView: InfiniteCollectionView, didChangeCenteredIndexPath centeredIndexPath: IndexPath?)
+    
+    @objc
+    optional func infiniteCollectionView(_ infiniteCollectionView: InfiniteCollectionView, didFinishScrollWith centerIndexPaths: [IndexPath], centerAlignmentType type: InfiniteLayoutCenterAlignmentType)
+    
 }
 
 open class InfiniteCollectionView: UICollectionView {
@@ -20,7 +49,9 @@ open class InfiniteCollectionView: UICollectionView {
     @IBOutlet open weak var infiniteDelegate: InfiniteCollectionViewDelegate?
     
     open private(set) var centeredIndexPath: IndexPath?
+    open private(set) var centerIndexPaths: [IndexPath]?
     open var preferredCenteredIndexPath: IndexPath? = IndexPath(item: 0, section: 0)
+    open var preferredCenterAlignmentType: InfiniteLayoutCenterAlignmentType = .center
     
     var forwardDelegate: Bool { return true }
     var _contentSize: CGSize?
@@ -183,6 +214,9 @@ extension InfiniteCollectionView: UICollectionViewDelegate {
     public func scrollViewDidScroll(_ scrollView: UIScrollView) {
         delegateProxy.delegate?.scrollViewDidScroll?(scrollView)
         self.updateLayoutIfNeeded()
+        
+        NSObject.cancelPreviousPerformRequests(withTarget: self)
+        self.perform(#selector(scrollViewDidEndScrollingAnimation(_:)), with: scrollView, afterDelay: 0.3)
     }
     
     // MARK: Paging
@@ -191,9 +225,6 @@ extension InfiniteCollectionView: UICollectionViewDelegate {
             !self.isDragging && !self.isDecelerating else {
                 return
         }
-        guard self._contentSize != self.contentSize else {
-            return
-        }
         self._contentSize = self.contentSize
         self.infiniteLayout.centerCollectionViewIfNeeded(indexPath: self.preferredCenteredIndexPath)
     }
@@ -201,6 +232,29 @@ extension InfiniteCollectionView: UICollectionViewDelegate {
     public func scrollViewWillEndDragging(_ scrollView: UIScrollView, withVelocity velocity: CGPoint, targetContentOffset: UnsafeMutablePointer<CGPoint>) {
         if isItemPagingEnabled {
             self.infiniteLayout.centerCollectionView(withVelocity: velocity, targetContentOffset: targetContentOffset)
+        }
+    }
+    
+    public func scrollViewDidEndScrollingAnimation(_ scrollView: UIScrollView) {
+        self.scrollViewDidFinishScroll(scrollView)
+        NSObject.cancelPreviousPerformRequests(withTarget: self)
+    }
+    
+    private func scrollViewDidFinishScroll(_ scrollView: UIScrollView) {
+        if let delegate = self.delegate as? InfiniteCollectionViewDelegate {
+            var centerIndexPaths = [IndexPath]()
+            if self.preferredCenterAlignmentType == .center {
+                if let preferredVisibleIndexPath = infiniteLayout.preferredVisibleLayoutAttributes()?.indexPath {
+                    centerIndexPaths.append(preferredVisibleIndexPath)
+                }
+            } else {
+                let preferredVisibleIndexPaths = infiniteLayout.preferredVisibleLayoutAttributesForNearbyCenter()?.compactMap { $0.indexPath }
+                if let preferredVisibleIndexPaths = preferredVisibleIndexPaths {
+                    centerIndexPaths.append(contentsOf: preferredVisibleIndexPaths)
+                }
+            }
+            self.centerIndexPaths = centerIndexPaths
+            delegate.infiniteCollectionView?(self, didFinishScrollWith: centerIndexPaths, centerAlignmentType: self.preferredCenterAlignmentType)
         }
     }
 }

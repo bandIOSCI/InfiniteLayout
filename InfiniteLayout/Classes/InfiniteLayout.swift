@@ -11,7 +11,7 @@ open class InfiniteLayout: UICollectionViewFlowLayout {
     
     public var velocityMultiplier: CGFloat = 1 // used to simulate paging
     
-    private let multiplier: CGFloat = 500 // contentOffset multiplier
+    private let multiplier: CGFloat = 100 // contentOffset multiplier
     
     private var contentSize: CGSize = .zero
     
@@ -29,7 +29,14 @@ open class InfiniteLayout: UICollectionViewFlowLayout {
         }
         return self.page(for: collectionView.contentOffset)
     }
-        
+    
+    public var delegate: UICollectionViewDelegateFlowLayout? {
+        guard let delegate = self.collectionView?.delegate as? UICollectionViewDelegateFlowLayout else {
+            return nil
+        }
+        return delegate
+    }
+    
     open override func shouldInvalidateLayout(forBoundsChange newBounds: CGRect) -> Bool {
         return true
     }
@@ -207,10 +214,10 @@ open class InfiniteLayout: UICollectionViewFlowLayout {
         }
         return (self.layoutAttributesForElements(in: CGRect(origin: offset ?? collectionView.contentOffset, size: collectionView.frame.size)) ?? [])
             .sorted(by: { lhs, rhs in
-                guard let lhs = self.centeredContentOffset(forRect: lhs.frame) else {
+                guard let lhs = self.centeredContentOffset(forLayoutAttributes: lhs) else {
                     return false
                 }
-                guard let rhs = self.centeredContentOffset(forRect: rhs.frame) else {
+                guard let rhs = self.centeredContentOffset(forLayoutAttributes: rhs) else {
                     return true
                 }
                 let value: (CGPoint)->CGFloat = {
@@ -236,20 +243,49 @@ open class InfiniteLayout: UICollectionViewFlowLayout {
         }
         return attributes
             .first { attributes in
-                guard let offset = self.centeredContentOffset(forRect: attributes.frame) else {
+                guard let offset = self.centeredContentOffset(forLayoutAttributes: attributes) else {
                     return false
                 }
                 return direction(offset) == targetDirection || velocity == 0
         }
     }
     
-    func centeredContentOffset(forRect rect: CGRect) -> CGPoint? {
+    public func preferredVisibleLayoutAttributesForNearbyCenter() -> [UICollectionViewLayoutAttributes]? {
+        let visibleLayoutAttributes = self.visibleLayoutAttributes().sorted { self.scrollDirection == .horizontal ? ($0.frame.minX < $1.frame.minX) : ($0.frame.minY < $1.frame.minY) }
+        guard !visibleLayoutAttributes.isEmpty, (visibleLayoutAttributes.count % 2) == 0 else { return nil }
+        var attributes = [UICollectionViewLayoutAttributes]()
+        let baseValue = (visibleLayoutAttributes.count / 2)
+        attributes.append(visibleLayoutAttributes[(baseValue - 1)])
+        attributes.append(visibleLayoutAttributes[baseValue])
+        return attributes
+    }
+    
+    func centeredContentOffset(forLayoutAttributes layoutAttributes: UICollectionViewLayoutAttributes) -> CGPoint? {
         guard let collectionView = self.collectionView,
             let collectionRect = self.collectionViewRect() else {
-            return nil
+                return nil
         }
-        return CGPoint(x: self.scrollDirection == .horizontal ? abs(rect.midX - collectionRect.origin.x - collectionRect.width/2) : collectionView.contentOffset.x,
-                       y: self.scrollDirection == .vertical ? abs(rect.midY - collectionRect.origin.y - collectionRect.height/2) : collectionView.contentOffset.y)
+        let offset = CGPoint(x: self.scrollDirection == .horizontal ? abs(layoutAttributes.frame.midX - collectionRect.origin.x - collectionRect.width/2) : collectionView.contentOffset.x,
+                             y: self.scrollDirection == .vertical ? abs(layoutAttributes.frame.midY - collectionRect.origin.y - collectionRect.height/2) : collectionView.contentOffset.y)
+        return self.alignOffset(offset, by: ((collectionView as? InfiniteCollectionView)?.preferredCenterAlignmentType ?? .center), using: layoutAttributes)
+    }
+    
+    private func alignOffset(_ offset: CGPoint, by alignmentType: InfiniteLayoutCenterAlignmentType = .center, using layoutAttributes: UICollectionViewLayoutAttributes) -> CGPoint {
+        var aligned = offset
+        let alignValue = ((self.scrollDirection == .horizontal ? layoutAttributes.size.width : layoutAttributes.size.height) + self.actualMinimumLineSpacingForSection(at: layoutAttributes.indexPath.section)) * 0.5
+        switch alignmentType {
+        case .centerTop:
+            aligned = CGPoint(x: offset.x, y: (offset.y + alignValue))
+        case .centerLeft:
+            aligned = CGPoint(x: (offset.x + alignValue), y: offset.y)
+        case .centerBottom:
+            aligned = CGPoint(x: offset.x, y: (offset.y - alignValue))
+        case .centerRight:
+            aligned = CGPoint(x: (offset.x - alignValue), y: offset.y)
+        default:
+            break
+        }
+        return aligned
     }
     
     public func centerCollectionView(withVelocity velocity: CGPoint, targetContentOffset: UnsafeMutablePointer<CGPoint>) {
@@ -260,7 +296,7 @@ open class InfiniteLayout: UICollectionViewFlowLayout {
                                 y: self.scrollDirection == .vertical ? collectionView.contentOffset.y + velocity.y * velocityMultiplier : targetContentOffset.pointee.y)
         
         guard let preferredAttributes = self.preferredVisibleLayoutAttributes(at: newTarget, velocity: velocity, targetOffset: targetContentOffset.pointee),
-            let offset =  self.centeredContentOffset(forRect: preferredAttributes.frame) else {
+            let offset = self.centeredContentOffset(forLayoutAttributes: preferredAttributes) else {
                 return
         }
         targetContentOffset.pointee = offset
@@ -271,7 +307,7 @@ open class InfiniteLayout: UICollectionViewFlowLayout {
             return
         }
         guard let preferredAttributes = self.preferredVisibleLayoutAttributes(indexPath: indexPath),
-            let offset = self.centeredContentOffset(forRect: preferredAttributes.frame),
+            let offset = self.centeredContentOffset(forLayoutAttributes: preferredAttributes),
             collectionView.contentOffset != offset else {
                 return
         }
@@ -287,5 +323,16 @@ open class InfiniteLayout: UICollectionViewFlowLayout {
         return array.map { self.copyLayoutAttributes($0) }
             .filter { $0 != nil }
             .map { $0! }
+    }
+    
+    private func actualMinimumLineSpacingForSection(at section: Int) -> CGFloat {
+        var minimumLineSpacing = self.minimumLineSpacing
+        guard let collectionView = self.collectionView, let delegate = self.delegate else {
+            return minimumLineSpacing
+        }
+        if let minimumLineSpacingForSection = delegate.collectionView?(collectionView, layout: self, minimumLineSpacingForSectionAt: section) {
+            minimumLineSpacing = minimumLineSpacingForSection
+        }
+        return minimumLineSpacing
     }
 }
