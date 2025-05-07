@@ -6,7 +6,7 @@
 //
 
 import UIKit
-import CocoaProxy
+import InfiniteLayoutObjc
 
 class InfiniteCollectionViewProxy<T: NSObjectProtocol>: CocoaProxy {
     

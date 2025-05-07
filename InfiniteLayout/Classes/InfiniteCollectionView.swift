@@ -130,9 +130,13 @@ open class InfiniteCollectionView: UICollectionView {
     
     open override func awakeFromNib() {
         super.awakeFromNib()
-        sharedInit()
+        DispatchQueue.main.async { [weak self] in
+            self?.sharedInit()
+        }
+        
     }
     
+    @MainActor
     private func sharedInit() {
         self.showsVerticalScrollIndicator = false
         self.showsHorizontalScrollIndicator = false
