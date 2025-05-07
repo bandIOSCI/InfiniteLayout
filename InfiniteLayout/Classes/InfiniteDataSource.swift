@@ -17,7 +17,7 @@ class InfiniteDataSources {
         return IndexPath(item: infiniteIndexPath.item % numberOfItems, section: self.section(from: infiniteIndexPath.section, numberOfSections: numberOfSections))
     }
     
-    static func multiplier(estimatedItemSize: CGSize, enabled: Bool) -> Int {
+    @MainActor static func multiplier(estimatedItemSize: CGSize, enabled: Bool) -> Int {
         guard enabled else {
             return 1
         }
