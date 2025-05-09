@@ -23,7 +23,7 @@ let package = Package(
         .target(
             name: "InfiniteLayout",
             dependencies: ["InfiniteLayoutObjc"],
-            path: "InfiniteLayout/Classes",
+            path: "InfiniteLayout/Classes"
         ),
     ]
 )
